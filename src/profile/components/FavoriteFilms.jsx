@@ -15,24 +15,24 @@ const FavoriteFilms = () => {
         <StyledTouchableOpacity onLongPress={drag} disabled={isActive}>
 
             <FastImage
-                style={{ width: 70, height: 90, borderRadius: 7 }}
+                style={{ width: 80, height: 105, borderRadius: 7 }}
                 source={{
                     uri: item.poster,
                     priority: FastImage.priority.normal,
                 }}
-                resizeMode={FastImage.resizeMode.cover}
+                resizeMode={FastImage.resizeMode.stretch}
             />
             {/* <FastImage className="w-[70px] rounded h-[90px]" style={{ resizeMode: "stretch" }} source={{ uri: item.poster }} /> */}
         </StyledTouchableOpacity>
 
     );
     return (
-        <StyledView className="items-center mb-5">
-            <StyledText className="font-semibold my-4 text-white">Kayren's favorite Films</StyledText>
+        <StyledView className="items-center ">
+            <StyledText className="font-semibold mt-4 mb-2 text-base text-white capitalize">Ali's favorite Films</StyledText>
             <DraggableFlatList
                 data={favFilms}
 
-                contentContainerStyle={{ gap: 20 ,height: 100,  alignItems:"center"}}
+                contentContainerStyle={{ gap: 8 ,height: 120,  alignItems:"center"}}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 onDragEnd={({ data }) => setFavfilms(data)}

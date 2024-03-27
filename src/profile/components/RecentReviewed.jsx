@@ -1,47 +1,30 @@
-import { StyledImage, StyledText, StyledTouchableOpacity, StyledView } from "../../common/components/StyledComponents";
+import React from 'react'
+import { StyledImage, StyledText, StyledTouchableOpacity, StyledView } from '../../common/components/StyledComponents'
+import { FlatList } from 'react-native';
 import StarIcon from "../../../assets/icons/star-icon.svg"
 import StarEmptyIcon from "../../../assets/icons/star-empty.svg"
-import Stars from 'react-native-stars';
 import CommentIcon from "../../../assets/icons/comment-icon.svg"
-import { FlatList } from "react-native";
-
-
-const friendsReviewItems = [
+import Stars from 'react-native-stars';
+const recentsReviewItems = [
     {
         movie: { title: "The Irishman", year: 2019, poster: "https://i.pinimg.com/564x/17/b7/76/17b776a9e2d980bfa56cd6117a538f9e.jpg" }, author: {
-            username: "Adrian", ppUrl: "https://i.pinimg.com/564x/ff/88/09/ff88094d95a1fed15700ba9b7cf55602.jpg", review: `working stiffs
+            username: "Ali", ppUrl: "https://i.pinimg.com/564x/ff/88/09/ff88094d95a1fed15700ba9b7cf55602.jpg", review: `working stiffs
 
 not sure i've ever mentioned this before but i have a very personal fear of not... feeling... correctly. like enormously important things are happening around you in a matter-of-fact, dissociative way that you can understand the significance of but you can't shake.`}, starCount: 4, commentCount: 8
     },
     {
         movie: { title: "Zack Snyder’s Justice League", year: 2021, poster: "https://i.pinimg.com/564x/47/38/7c/47387c080decbfb56f75149974564309.jpg" }, author: {
-            username: "Audrey", ppUrl: "https://i.pinimg.com/564x/cf/87/cc/cf87ccda6ae9a345e0c9f7424d095162.jpg", review: `the interesting thing about snyder is that he always swings big: whether it results in a colossal whiff or a home run just depends on the particular project, amount of creative control, and audience reception. but he always puts his unique style into it, and for that reason i’ve really grown fond of his stuff. his involvement in the dceu has kept me interested, and i still have fun with both their best content or biggest flops...`
+            username: "Ali", ppUrl: "https://i.pinimg.com/564x/cf/87/cc/cf87ccda6ae9a345e0c9f7424d095162.jpg", review: `the interesting thing about snyder is that he always swings big: whether it results in a colossal whiff or a home run just depends on the particular project, amount of creative control, and audience reception. but he always puts his unique style into it, and for that reason i’ve really grown fond of his stuff. his involvement in the dceu has kept me interested, and i still have fun with both their best content or biggest flops...`
         }, starCount: 4, commentCount: 2
     },
     {
         movie: { title: "tick, tick…BOOM!", year: 2021, poster: "https://i.pinimg.com/564x/74/f2/6c/74f26c887b8b656913b4d0b0d7256b05.jpg" }, author: {
-            username: "Rebecca", ppUrl: "https://i.pinimg.com/564x/63/ab/ff/63abfffdeb84cbe05de887ed9a5749e0.jpg", review: `I’ve finally figured out what this movie means to me, in a way. And mostly through comparison to Spielberg’s West Side Story aka the only other musical adaptation I watched this year, whoops. West Side Story is dreamlike, enthralling, heartwrenching, it’s a grand and tragic romance that you can’t help but get swept up into. Tick Tick Boom isn’t that; it has a few more moments of melodrama, the camera movements...`
+            username: "Ali", ppUrl: "https://i.pinimg.com/564x/63/ab/ff/63abfffdeb84cbe05de887ed9a5749e0.jpg", review: `I’ve finally figured out what this movie means to me, in a way. And mostly through comparison to Spielberg’s West Side Story aka the only other musical adaptation I watched this year, whoops. West Side Story is dreamlike, enthralling, heartwrenching, it’s a grand and tragic romance that you can’t help but get swept up into. Tick Tick Boom isn’t that; it has a few more moments of melodrama, the camera movements...`
         }, starCount: 3, commentCount: 20
     },
 ];
 
-
-
-
-
-
-
-const message = `working stiffs
-
-not sure i've ever mentioned this before but i have a very personal fear of not... feeling... correctly. like enormously important things are happening around you in a matter-of-fact, dissociative way that you can understand the significance of but you can't shake.`
-const FriendsReview = () => {
-    const renderStars = (rating) => {
-        const stars = [];
-        for (let i = 0; i < rating; i++) {
-            stars.push(<StarIcon key={i} />);
-        }
-        return stars;
-    };
+const RecentReviewed = () => {
     const renderItem = ({ item }) => (
         <StyledView className="flex-row bg-[#29243B] rounded-2xl  justify-between">
             <StyledImage className="w-[40px] h-[40px] rounded-full" source={{ uri: item.author.ppUrl }} />
@@ -84,12 +67,16 @@ const FriendsReview = () => {
         </StyledView>
     );
     return (
-        <StyledView className="mt-6 mb-5 mr-5">
-            <StyledText className="text-base mb-5 text-white font-semibold">Recent Friends’ Review</StyledText>
-
+        <StyledView className="p-5">
+            <StyledView className="flex-row justify-between mb-5">
+                <StyledText className="text-white">Ali’s Recent Reviewed</StyledText>
+                <StyledTouchableOpacity>
+                    <StyledText className="text-[#E9A6A6]">See all</StyledText>
+                </StyledTouchableOpacity>
+            </StyledView>
             <FlatList
                 contentContainerStyle={{ gap: 13, }}
-                data={friendsReviewItems}
+                data={recentsReviewItems}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
                 scrollEnabled={false}
@@ -97,4 +84,5 @@ const FriendsReview = () => {
         </StyledView>
     )
 }
-export default FriendsReview;
+
+export default RecentReviewed

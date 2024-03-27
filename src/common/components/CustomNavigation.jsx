@@ -8,6 +8,9 @@ import HomeIcon from "../../../assets/icons/fluent--home-20-regular.svg"
 import Profile from "../../profile/Profile";
 import StartPage from "../../start/StartPage";
 import TestDragPage from "../../TestDragPage";
+import Login from "../../auth/login/Login";
+import Movie from "../../movie/Movie";
+import Review from "../../review/Review";
 const BottomStack = createBottomTabNavigator()
 const Drawer = createDrawerNavigator();
 
@@ -21,28 +24,28 @@ function AppBottomStack() {
         >
             <BottomStack.Screen
                 name='MainPage'
-                component={Profile}
+                component={Review}
                 options={{ headerShown: false ,tabBarIcon: ({ color, size }) => {
                     return <HomeIcon fill={color} size={size} />;
                 }}}
             />
             <BottomStack.Screen
                 name='SearchPage'
-                component={TestDragPage}
+                component={Profile}
                 options={{ headerShown: false ,tabBarIcon: ({ color, size }) => {
                     return <HomeIcon fill={color} size={size} />;
                 }}}
             />
             <BottomStack.Screen
                 name='NotificationPage'
-                component={StartPage}
+                component={Movie}
                 options={{ headerShown: false ,tabBarIcon: ({ color, size }) => {
                     return <HomeIcon fill={color} size={size} />;
                 }}}
             />
             <BottomStack.Screen
                 name='ProfilePage'
-                component={Profile}
+                component={MainPage}
                 options={{ headerShown: false ,tabBarIcon: ({ color, size }) => {
                     return <HomeIcon fill={color} size={size} />;
                 }}}
