@@ -91,6 +91,11 @@ const Movie = () => {
                                 <StyledTouchableOpacity className='w-[10px] h-[60%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
                                 <StyledTouchableOpacity className='w-[10px] h-[40%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
                                 <StyledTouchableOpacity className='w-[10px] h-[20%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
+                                <StyledTouchableOpacity className='w-[10px] h-[80%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
+                                <StyledTouchableOpacity className='w-[10px] h-[60%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
+                                <StyledTouchableOpacity className='w-[10px] h-full  bg-[#8F8E9B]'></StyledTouchableOpacity>
+                                <StyledTouchableOpacity className='w-[10px] h-[20%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
+                                <StyledTouchableOpacity className='w-[10px] h-[40%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
                             </StyledView>
                             <StyledView className='items-center'>
                                 <StyledText className='text-3xl text-[#E9A6A6]'>4.4</StyledText>

@@ -6,14 +6,35 @@ import EyeIcon from "../../../assets/icons/eye-icon.svg"
 import ClosedEyeIcon from "../../../assets/icons/eye-closed-icon.svg"
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-const Login = () => {
+import { GoogleSigninButton,GoogleSignin,statusCodes } from "@react-native-google-signin/google-signin";
+const Login = ({ onSuccess, onError }) => {
+    GoogleSignin.configure({ webClientId: '993553022973-q3a0c3pc699rkbp1og1spe2573gba5ar.apps.googleusercontent.com',});
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const nav = useNavigation()
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
+    const handleGoogleSignIn = async () => {
+        try {
+         const test =  await GoogleSignin.hasPlayServices();
+         console.log(test)
+          const userInfo = await GoogleSignin.signIn();
+          console.log(userInfo)
+         await onSuccess(userInfo); // Pass the user info to the parent component
+        } catch (error) {
+          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            console.log('Google Sign-In cancelled');
+          } else if (error.code === statusCodes.IN_PROGRESS) {
+            console.log('Google Sign-In is in progress');
+          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            console.log('Play services not available or outdated');
+          } else {
+            console.log('Something went wrong with Google Sign-In: ' + error.message);
+          }
+        }
+      };
+    
     return (
         <ScrollView>
             <StyledView className=" flex-1 items-center" >
@@ -55,6 +76,11 @@ const Login = () => {
                         Login
                     </StyledText>
                 </StyledTouchableOpacity>
+                <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={handleGoogleSignIn}
+      />
                 <StyledView className="items-center flex-row mt-5">
                     <StyledText className="text-[#E9A6A6]">
                         Don’t have an account? Please

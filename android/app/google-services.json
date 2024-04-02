@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "993553022973",
+    "project_id": "cinecircle-6c35d",
+    "storage_bucket": "cinecircle-6c35d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993553022973:android:77429d8f7d1575ccad6394",
+        "android_client_info": {
+          "package_name": "com.cinecircle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993553022973-l1ngg52v23p93jfcujugovfcm74803vc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinecircle",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "993553022973-q3a0c3pc699rkbp1og1spe2573gba5ar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKASYMauU7d285kt_nrhanh0tlTE2st84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993553022973-aice5s1tegqksd0b6v48i23k3jbfsofk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

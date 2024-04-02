@@ -31,7 +31,7 @@ function AppBottomStack() {
             />
             <BottomStack.Screen
                 name='SearchPage'
-                component={Profile}
+                component={Login}
                 options={{ headerShown: false ,tabBarIcon: ({ color, size }) => {
                     return <HomeIcon fill={color} size={size} />;
                 }}}
