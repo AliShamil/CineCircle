@@ -158,7 +158,7 @@ const Diary = () => {
     const renderItem = ({ item }) => (
         <StyledTouchableOpacity className='flex-row items-center'>
         <StyledView className='w-16 h-16 ml-5 border-[#E9A6A6] border-[1px] rounded-lg items-center justify-center'>
-            <StyledText className='text-xl'>{item.date}</StyledText>
+            <StyledText className='text-xl text-white'>{item.date}</StyledText>
         </StyledView>
         <StyledView className='ml-3'>
             <FastImage className="w-[64px] rounded-lg shadow-black shadow-2xl h-[80px]"
@@ -171,7 +171,7 @@ const Diary = () => {
                 resizeMode={FastImage.resizeMode.cover}></FastImage>
         </StyledView>
         <StyledView className='ml-2 '>
-            <StyledText >{item.title} <StyledText className='text-[10px]'>{item.movieYear}</StyledText></StyledText>
+            <StyledText className='text-white'>{item.title} <StyledText className='text-[10px] '>{item.movieYear}</StyledText></StyledText>
             <StyledView className='flex-row mt-1'>
                 <StyledView className='mr-3'>
                     <Stars
@@ -195,7 +195,7 @@ const Diary = () => {
                 keyExtractor={(item, index) => item + index}
                 renderItem={renderItem}
                 renderSectionHeader={({ section: { title } }) => (
-                    <StyledText className='bg-[#29243B] text-lg pl-5 py-2 rounded-3xl'>{title}</StyledText>
+                    <StyledText className='bg-[#29243B] text-white text-lg pl-5 py-2 rounded-3xl'>{title}</StyledText>
                 )}
                 stickySectionHeadersEnabled={true}
                 contentContainerStyle={{ gap: 5 }}

@@ -8,10 +8,10 @@ import RecentReviewed from "./components/RecentReviewed";
 const Profile = () => {
     return (
         <StyledView className="flex-1 ">
-            <StyledView className="w-full h-[25%]  ">
+            <StyledView className="w-full h-[23%]  ">
                 <StyledImage className="w-full h-full" style={{ resizeMode: "cover" }} source={{ uri: "https://i.pinimg.com/736x/3a/cc/25/3acc25f4d5b4d7b26f5132b0aed3c745.jpg" }} />
             </StyledView>
-            <StyledView className="absolute top-28 z-20 w-full items-center">
+            <StyledView className="absolute top-20 z-20 w-full items-center">
                 <StyledView className="w-20 h-20 ">
                     <StyledTouchableOpacity className="w-5 h-5 p-1  items-center bg-[#1F1D36] rounded-full z-10 absolute right-0">
                         <PenIcon />
@@ -19,6 +19,7 @@ const Profile = () => {
                     <StyledImage className="w-full rounded-full h-full" style={{ resizeMode: "cover" }} source={{ uri: "https://i.pinimg.com/564x/ba/a9/b8/baa9b8ff466daf133bb63034e2bd4e2b.jpg" }} />
                 </StyledView>
                 <StyledText className="text-lg font-bold text-white">Ali</StyledText>
+                <StyledText className="text-xs  text-white mx-5 mb-2" numberOfLines={1}>sdjk;vbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</StyledText>
                 <StyledView className="flex-row gap-10">
                     <StyledTouchableOpacity className="items-center">
                         <StyledView className="flex-row">

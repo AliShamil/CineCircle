@@ -16,7 +16,7 @@ const SignUp = () => {
     };
 
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor:  "#1F1D36"}}>
             <StyledView className=" flex-1 items-center" >
                 <StyledView className="items-center">
                     <StyledImage className="w-screen" source={require('../../../assets/images/login-banner.png')} />
