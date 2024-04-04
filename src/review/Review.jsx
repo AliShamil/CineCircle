@@ -14,21 +14,21 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import DatePicker from 'react-native-modern-datepicker';
 import { Modal } from 'react-native'
+import { format } from 'date-fns';
+import RNDateTimePicker from '@react-native-community/datetimepicker'
 const Review = () => {
     const [stars, setStars] = useState(0);
     const [isLiked, setLike] = useState(false);
     const [loader, setLoader] = useState(true);
-    const [selectedImage, setSelectedImage] = useState();
-    const [selectedDate, setSelectedDate] = useState('');
-    const [isCalendarModalVisible, setCalendarModalVisible] = useState(false);
-    const formatDate = (dateString) => {
-        const [year, month, day] = dateString.split('/');
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        const monthName = months[parseInt(month, 10) - 1];
-        return `${parseInt(day, 10)} ${monthName} ${year}`;
+    const [selectedImage, setSelectedImage] = useState("https://i.pinimg.com/564x/23/cc/58/23cc58d19fceb5d508cd30beba74fbb5.jpg");
+    const [date, setDate] = useState(new Date());
+    const [showCalendar, setShowCalendar] = useState(false);
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShowCalendar(false);
+        setDate(currentDate);
       };
-      
-      
+
     const openImagePicker = () => {
         const options = {
             mediaType: 'quality',
@@ -48,42 +48,17 @@ const Review = () => {
             }
         });
     };
-    const date = new Date();
 
-    
+
+
     useEffect(() => {
         setTimeout(() => {
             setLoader(false);
         }, 3000);
     }, []);
+    console.log(date)
     return (
         <ScrollView>
-            {isCalendarModalVisible && (
-  <Modal visible={isCalendarModalVisible}  animationType="slide">
-    
-                       <DatePicker
-      options={{
-        backgroundColor: '#090C08',
-        textHeaderColor: '#FFA25B',
-        textDefaultColor: '#F6E7C1',
-        selectedTextColor: '#fff',
-        mainColor: '#F4722B',
-        textSecondaryColor: '#D6C7A1',
-        borderColor: 'rgba(122, 146, 165, 0.1)',
-      }}
-      current={date.getFullYear()`-`}
-      selected="2020-07-23"
-      mode="calendar"
-      minuteInterval={30}
-      onSelectedChange={date => setSelectedDate(date)}
-      style={{ borderRadius: 10 }}
-      onDateChange={date => {
-        setSelectedDate(date);
-        setCalendarModalVisible(false); // Close modal on date selection
-      }}
-    />
-  </Modal>
-)}
             <StyledView className='mt-[30px] px-5 flex-row items-center'>
                 <StyledTouchableOpacity>
                     <ArrowBackIcon width={20} height={20} />
@@ -100,13 +75,13 @@ const Review = () => {
                 </>)
                 : (<><StyledView className='px-5 mt-10 flex-row justify-between'>
                     <StyledView>
-                        <StyledText className='text-xl text-white font-semibold'>The Batman <StyledText className='text-[12px] font-normal'>{formatDate(selectedDate)}</StyledText></StyledText>
+                        <StyledText className='text-xl text-white font-semibold'>The Batman <StyledText className='text-[12px] font-normal'></StyledText></StyledText>
                         <StyledView className='mt-[18px]'>
                             <StyledText className='text-white'>Specify the date you watched it</StyledText>
                             <StyledView className='flex-row py-2 px-[15px] bg-[#3D3B54] rounded-xl justify-between mt-[6px]'>
                                 <CalendarIcon />
-                                <StyledText className='text-white text-xs font-semibold'>06 March 2022</StyledText>
-                                <StyledTouchableOpacity onPress={() => setCalendarModalVisible(true)}>
+                                <StyledText className='text-white mx-1 text-xs font-semibold'>{format(date, 'dd MMMM yyyy')}</StyledText>
+                                <StyledTouchableOpacity onPress={() => setShowCalendar(true)}>
                                     <StyledText className='text-[#E9A6A6] text-xs font-semibold'>Change</StyledText>
                                 </StyledTouchableOpacity>
                             </StyledView>
@@ -133,7 +108,7 @@ const Review = () => {
                     <FastImage className="w-[120px] rounded-lg shadow-black shadow-2xl h-[190px]"
                         source={{
 
-                            uri: "https://i.pinimg.com/564x/23/cc/58/23cc58d19fceb5d508cd30beba74fbb5.jpg",
+                            uri: selectedImage,
                             priority: FastImage.priority.normal,
                         }}
 
@@ -147,8 +122,17 @@ const Review = () => {
                     <StyledTouchableOpacity onPress={openImagePicker} className='bg-[#E9A6A6] w-[104px] h-[36px] items-center justify-center rounded-[20px] self-end mr-5 mb-[18px]'>
                         <StyledText className='text-black font-semibold'>Publish</StyledText>
                     </StyledTouchableOpacity></>)}
-
-
+            {showCalendar && (
+                <RNDateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={'date'}
+                    is24Hour={true}
+                    onChange={onChange}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(1939, 8, 2)}
+                />
+            )}
 
         </ScrollView>
     )

@@ -12,18 +12,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CustomDrawerContent from './src/common/components/CustomDrawerContent';
 import CustomTabBar from './src/common/components/CustomTabBar';
 import CustomNavigation from './src/common/components/CustomNavigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-
+import { StatusBar } from 'react-native';
 
 const App = () => {
   return (
-    <StyledSafeAreaView className='flex-1 bg-[#1F1D36]'>
-      <CustomNavigation />
-    </StyledSafeAreaView>
-    //<StartPage/>
-    //<SignUp/>
-    //<Login/>
-
+    <SafeAreaView style={{ flex: 1 , backgroundColor:"#1F1D36" }}>
+          <CustomNavigation />
+    </SafeAreaView>
   );
 }
 export default App;

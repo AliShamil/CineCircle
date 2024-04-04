@@ -23,12 +23,12 @@ import HeartActiveIcon from '../../../assets/icons/heart-active-icon.svg'
 
 const menuItems = [
     { icon: <HomeIcon />, iconActive: <HomeActiveIcon />, label: 'Home', screenName: 'MainPage' },
-    { icon: <FilmIcon />, iconActive: <FilmActiveIcon />, label: 'Films', screenName: 'FilmsScreen' },
-    { icon: <DiaryIcon />, iconActive: <DiaryActiveIcon  />, label: 'Diary', screenName: 'DiaryScreen' },
-    { icon: <ReviewIcon />, iconActive: <ReviewActiveIcon />, label: 'Reviews', screenName: 'ReviewsScreen' },
-    { icon: <WatchlistIcon />, iconActive: <WatchActiveIcon />, label: 'Watchlist', screenName: 'WatchlistScreen' },
-    { icon: <ListsIcon />, iconActive: <ListsActiveIcon />, label: 'Lists', screenName: 'ListsScreen' },
-    { icon: <HeartIcon />, iconActive: <HeartActiveIcon />, label: 'Likes', screenName: 'LikesScreen' },
+    { icon: <FilmIcon />, iconActive: <FilmActiveIcon />, label: 'Films', screenName: 'Films' },
+    { icon: <DiaryIcon />, iconActive: <DiaryActiveIcon  />, label: 'Diary', screenName: 'Diary' },
+    { icon: <ReviewIcon />, iconActive: <ReviewActiveIcon />, label: 'Reviews', screenName: 'Reviews' },
+    { icon: <WatchlistIcon />, iconActive: <WatchActiveIcon />, label: 'Watchlist', screenName: 'Watchlist' },
+    { icon: <ListsIcon />, iconActive: <ListsActiveIcon />, label: 'Lists', screenName: 'Lists' },
+    { icon: <HeartIcon />, iconActive: <HeartActiveIcon />, label: 'Likes', screenName: 'Likes' },
 ];
 
 
@@ -37,7 +37,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
     const navigateToScreen = (screenName) => {
         setActiveItem(screenName);
-        //navigation.navigate(screenName);
+        navigation.navigate(screenName);
     };
 
     const renderItem = ({ item }) => (

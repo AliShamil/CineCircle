@@ -7,8 +7,8 @@ import ClosedEyeIcon from "../../../assets/icons/eye-closed-icon.svg"
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleSigninButton,GoogleSignin,statusCodes } from "@react-native-google-signin/google-signin";
-const Login = ({ onSuccess, onError }) => {
-    GoogleSignin.configure({ webClientId: '993553022973-q3a0c3pc699rkbp1og1spe2573gba5ar.apps.googleusercontent.com',});
+const Login = () => {
+    GoogleSignin.configure({ idTokenAudience: 'cinecircle-6c35d', webClientId: '993553022973-q3a0c3pc699rkbp1og1spe2573gba5ar.apps.googleusercontent.com',});
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const nav = useNavigation()
@@ -21,7 +21,7 @@ const Login = ({ onSuccess, onError }) => {
          console.log(test)
           const userInfo = await GoogleSignin.signIn();
           console.log(userInfo)
-         await onSuccess(userInfo); // Pass the user info to the parent component
+ // Pass the user info to the parent component
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             console.log('Google Sign-In cancelled');

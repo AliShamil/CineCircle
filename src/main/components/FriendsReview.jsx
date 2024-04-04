@@ -35,13 +35,6 @@ const message = `working stiffs
 
 not sure i've ever mentioned this before but i have a very personal fear of not... feeling... correctly. like enormously important things are happening around you in a matter-of-fact, dissociative way that you can understand the significance of but you can't shake.`
 const FriendsReview = () => {
-    const renderStars = (rating) => {
-        const stars = [];
-        for (let i = 0; i < rating; i++) {
-            stars.push(<StarIcon key={i} />);
-        }
-        return stars;
-    };
     const renderItem = ({ item }) => (
         <StyledView className="flex-row bg-[#29243B] rounded-2xl  justify-between">
             <StyledImage className="w-[40px] h-[40px] rounded-full" source={{ uri: item.author.ppUrl }} />
