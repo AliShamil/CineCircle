@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 const SignUp = () => {
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const nav =useNavigation()
     const toggleShowPassword = () => {
@@ -47,6 +48,16 @@ const SignUp = () => {
                             {showPassword ? <EyeIcon /> : <ClosedEyeIcon />}
                         </StyledTouchableOpacity>
                     </StyledView>
+                    <StyledView className="w-[70%] bg-[#595868] rounded-[30px] px-5 mb-2 h-[40px]  flex-row items-center">
+                        <LockIcon width={20} height={17} />
+                        <StyledTextInput className="ml-2 mr-2 w-[75%] text-white" placeholder="Confirm Password" placeholderTextColor={"#ACACB4"} secureTextEntry={!showPassword}
+                            value={confirmPassword}
+                            onChangeText={(text) => setConfirmPassword(text)}
+                        />
+                        <StyledTouchableOpacity className="mr-10  " onPress={toggleShowPassword}>
+                            {showPassword ? <EyeIcon /> : <ClosedEyeIcon />}
+                        </StyledTouchableOpacity>
+                    </StyledView>
 
                 </StyledView>
                 <StyledTouchableOpacity className="bg-[#E9A6A6] h-[40px] w-[140px]  rounded-[30px] items-center justify-center">
@@ -56,10 +67,10 @@ const SignUp = () => {
                 </StyledTouchableOpacity>
                 <StyledView className="items-center flex-row mt-5 mb-10">
                     <StyledText className="text-[#E9A6A6] text-xs">
-                        Already have an account? Go to the Login Page.
+                        Already have an account? Go to the 
                     </StyledText>
-                    <StyledTouchableOpacity>
-                        <StyledText  onPress={()=> nav.navigate("Login")} className="text-[#8C4480] text ml-1">
+                    <StyledTouchableOpacity onPress={()=> nav.navigate("Login")}>
+                        <StyledText   className="text-[#8C4480] text-sm ml-1">
                             Login Page.
                         </StyledText>
                     </StyledTouchableOpacity>

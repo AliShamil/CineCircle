@@ -1,18 +1,25 @@
 import { StyledImage, StyledText, StyledTextInput, StyledTouchableOpacity, StyledView } from "../../common/components/StyledComponents";
-import { ScrollView } from "react-native";
+import { ActivityIndicator, ScrollView } from "react-native";
 import LockIcon from "../../../assets/icons/lock-icon.svg"
 import UserIcon from "../../../assets/icons/user-icon.svg"
 import EyeIcon from "../../../assets/icons/eye-icon.svg"
 import ClosedEyeIcon from "../../../assets/icons/eye-closed-icon.svg"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleSigninButton, GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import { storage } from "../../../storage";
+import axios from "axios";
+import { useStore } from "zustand";
+import { useAuthStore } from "../../common/hooks/useAuthStore";
+
 const Login = () => {
     GoogleSignin.configure({ idTokenAudience: 'cinecircle-6c35d', webClientId: '993553022973-q3a0c3pc699rkbp1og1spe2573gba5ar.apps.googleusercontent.com', });
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({})
+    const [loader, setLoader] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const {setIsAuthorized} = useStore(useAuthStore)
     const nav = useNavigation()
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -42,17 +49,55 @@ const Login = () => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     }
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (validateForm()) {
             console.log("Submitted", username, password);
-            setUsername("");
-            setPassword("");
-            setErrors({})
+
+            try {
+                setLoader(true)
+                const response = await fetch('https://cinecircleapi.azurewebsites.net/api/Auth/login', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: username,
+                        password: password,
+                    }),
+                });
+                const json = await response.json();
+                if (!response.ok) {
+                    throw new Error(json)
+                }
+                if(response.ok){
+                    setLoader(false)
+                    storage.set("user.token",JSON.stringify(json));
+                    setIsAuthorized(true);
+                    setUsername("");
+                    setPassword("");
+                    setErrors({})
+                }
+            } catch (error) {
+                let errors = {};
+                errors.password = error.message
+                setErrors(errors);
+                setUsername("");
+                setPassword("");
+                return;
+            }
+
         }
     }
-
     return (
         <ScrollView style={{ backgroundColor: "#1F1D36" }}>
+            {loader && (
+                <StyledView className="absolute z-50 h-screen w-screen justify-center items-center bg-black/30">
+                  <StyledView className="bg-[#29243B] shadow-2xl w-[150px] h-[150px] justify-center rounded-3xl">
+                    <ActivityIndicator  size="100px" />
+                  </StyledView>
+                </StyledView>
+              )}
             <StyledView className=" flex-1 items-center" >
                 <StyledView className="items-center">
                     <StyledImage className="w-screen" source={require('../../../assets/images/login-banner.png')} />
@@ -65,14 +110,14 @@ const Login = () => {
                 <StyledView className="w-full items-center py-5">
                     <StyledView className="w-[70%] bg-[#595868] rounded-[30px] px-5 mb-2 h-[40px] flex-row items-center">
                         <UserIcon width={20} height={17} />
-                        <StyledTextInput onChangeText={(text) => setUsername(text)} className="ml-2 mr-6 text-white " placeholder="Username" placeholderTextColor={"#ACACB4"}></StyledTextInput>
+                        <StyledTextInput value={username} onChangeText={(text) => { setUsername(text) }} className="ml-2 mr-6 text-white " placeholder="Username" placeholderTextColor={"#ACACB4"}></StyledTextInput>
                     </StyledView>
-                    {errors.username?(<StyledText className="text-red-600 mb-2">{errors.username}</StyledText>):null}
+                    {errors.username ? (<StyledText className="text-red-600 mb-2">{errors.username}</StyledText>) : null}
                     <StyledView className="w-[70%] bg-[#595868] rounded-[30px] px-5 mb-2 h-[40px]  flex-row items-center">
                         <LockIcon width={20} height={17} />
 
 
-                        <StyledTextInput className="ml-2 mr-2 w-[75%] text-white" placeholder="Password"  placeholderTextColor={"#ACACB4"} secureTextEntry={!showPassword}
+                        <StyledTextInput className="ml-2 mr-2 w-[75%] text-white" placeholder="Password" placeholderTextColor={"#ACACB4"} secureTextEntry={!showPassword}
                             value={password}
                             onChangeText={(text) => setPassword(text)}
                         />
@@ -80,7 +125,7 @@ const Login = () => {
                             {showPassword ? <EyeIcon /> : <ClosedEyeIcon />}
                         </StyledTouchableOpacity>
                     </StyledView>
-                        {errors.password?(<StyledText className="text-red-600">{errors.password}</StyledText>):null}
+                    {errors.password ? (<StyledText className="text-red-600">{errors.password}</StyledText>) : null}
 
                     <StyledTouchableOpacity className="ml-[35%] mt-1">
                         <StyledText className="text-[#E9A6A6] text-xs">Forgot Password?</StyledText>
@@ -97,7 +142,7 @@ const Login = () => {
                     color={GoogleSigninButton.Color.Dark}
                     onPress={handleGoogleSignIn}
                 />
-                <StyledView className="items-center flex-row mt-5">
+                <StyledView className="items-center flex-row my-5">
                     <StyledText className="text-[#E9A6A6]">
                         Don’t have an account? Please
                     </StyledText>

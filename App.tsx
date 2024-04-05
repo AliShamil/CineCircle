@@ -13,13 +13,17 @@ import CustomDrawerContent from './src/common/components/CustomDrawerContent';
 import CustomTabBar from './src/common/components/CustomTabBar';
 import CustomNavigation from './src/common/components/CustomNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { StatusBar } from 'react-native';
+import { useEffect } from 'react';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 const App = () => {
+
+  SystemNavigationBar.setNavigationColor('#1F1D36');
   return (
-    <SafeAreaView style={{ flex: 1 , backgroundColor:"#1F1D36" }}>
-          <CustomNavigation />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#1F1D36" }}>
+      <StatusBar barStyle="light-content" backgroundColor="#1F1D36" />
+      <CustomNavigation />
     </SafeAreaView>
   );
 }

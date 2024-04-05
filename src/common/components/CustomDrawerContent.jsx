@@ -19,12 +19,15 @@ import ReviewActiveIcon from '../../../assets/icons/review-active-icon.svg'
 import WatchActiveIcon from '../../../assets/icons/watch-active-icon.svg'
 import ListsActiveIcon from '../../../assets/icons/lists-active-icon.svg'
 import HeartActiveIcon from '../../../assets/icons/heart-active-icon.svg'
+import { storage } from '../../../storage';
+import { useAuthStore } from '../hooks/useAuthStore';
+import { useStore } from 'zustand';
 
 
 const menuItems = [
     { icon: <HomeIcon />, iconActive: <HomeActiveIcon />, label: 'Home', screenName: 'MainPage' },
     { icon: <FilmIcon />, iconActive: <FilmActiveIcon />, label: 'Films', screenName: 'Films' },
-    { icon: <DiaryIcon />, iconActive: <DiaryActiveIcon  />, label: 'Diary', screenName: 'Diary' },
+    { icon: <DiaryIcon />, iconActive: <DiaryActiveIcon />, label: 'Diary', screenName: 'Diary' },
     { icon: <ReviewIcon />, iconActive: <ReviewActiveIcon />, label: 'Reviews', screenName: 'Reviews' },
     { icon: <WatchlistIcon />, iconActive: <WatchActiveIcon />, label: 'Watchlist', screenName: 'Watchlist' },
     { icon: <ListsIcon />, iconActive: <ListsActiveIcon />, label: 'Lists', screenName: 'Lists' },
@@ -33,7 +36,15 @@ const menuItems = [
 
 
 const CustomDrawerContent = ({ navigation }) => {
-    const [activeItem, setActiveItem] = useState('MainPage'); 
+    const [activeItem, setActiveItem] = useState('MainPage');
+    const {setIsAuthorized} = useStore(useAuthStore);
+    const handleLogOut = () => {
+        const hasUsername = storage.contains('user.token')
+        hasUsername ? storage.delete("user.token") : null;
+        setIsAuthorized(false);
+    }
+
+
 
     const navigateToScreen = (screenName) => {
         setActiveItem(screenName);
@@ -80,7 +91,7 @@ const CustomDrawerContent = ({ navigation }) => {
                         renderItem={renderItem}
                     />
                 </StyledView>
-                <StyledTouchableOpacity className="mt-14 flex-row items-center  rounded-[15px] p-2 pl-4" >
+                <StyledTouchableOpacity onPress={() => { handleLogOut() }} className="mt-14 flex-row items-center  rounded-[15px] p-2 pl-4" >
                     <LogOutIcon />
                     <StyledText className='ml-5 text-white font-semibold'>Log Out</StyledText>
                 </StyledTouchableOpacity>

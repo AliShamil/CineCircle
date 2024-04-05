@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -20,12 +20,15 @@ import Lists from "../../lists/Lists";
 import { storage } from "../../../storage";
 import Login from "../../auth/login/Login";
 import SignUp from "../../auth/signUp/SignUp";
+import { useAuthStore } from "../hooks/useAuthStore";
+import { useStore } from "zustand";
+import TestDragPage from "../../TestDragPage";
 
 const BottomStack = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 const AuthStack = createNativeStackNavigator();
-const isAuthorized = storage.getString('user.token')
 function DrawerStack() {
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -48,30 +51,33 @@ function DrawerStack() {
 
 const linking = {
   prefixes: ["cinecircle://"],
-  initialRouteName: "MainPage",
-  screens: {
-    MainPage: {
-      path: "main",
-      screens: {
-        Home: "home",
-        Films: "films",
-        Diary: "diary",
-        Reviews: "reviews",
-        Watchlist: "watchlist",
-        Lists: "lists",
-        Likes: "likes",
+  config:{
+    initialRouteName: "MainPage",
+    screens: {
+      MainPage: {
+        path: "main",
+        screens: {
+          Home: "home",
+          Films: "films",
+          Diary: "diary",
+          Reviews: "reviews",
+          Watchlist: "watchlist",
+          Lists: "lists",
+          Likes: "likes",
+        },
       },
+      SearchPage: "search",
+      ProfilePage: "profile",
+      SettingsPage: "settings",
     },
-    SearchPage: "search",
-    ProfilePage: "profile",
-    SettingsPage: "settings",
-  },
+  }
 };
+
 function AppAuthStack() {
   return (
     <AuthStack.Navigator
       screenOptions={{ headerShown: false }}
-      >
+    >
       <AuthStack.Screen
         name="Login"
         component={Login} />
@@ -86,6 +92,7 @@ function AppAuthStack() {
 function AppBottomStack() {
   return (
     <BottomStack.Navigator
+    screenOptions={{navigationBarColor:"#1F1D36"}}
       sceneContainerStyle={{ backgroundColor: "#1F1D36" }}
       tabBar={(props) => <CustomTabBar {...props} />}
     >
@@ -101,7 +108,7 @@ function AppBottomStack() {
       />
       <BottomStack.Screen
         name="SearchPage"
-        component={Search}
+        component={TestDragPage}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -134,12 +141,19 @@ function AppBottomStack() {
 }
 
 const CustomNavigation = () => {
+  const { isAuthorized, setIsAuthorized } = useStore(useAuthStore)
+
+  useEffect(() => {
+    if (storage.getString("user.token") !== undefined)
+      setIsAuthorized(true);
+  }, []);
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer linking={linking} screenOptions={{navigationBarColor:"#1F1D36"}}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        {isAuthorized === undefined ?
-          (<AppAuthStack />)
-          : (<AppBottomStack />)}
+        {isAuthorized ?
+          (<AppBottomStack />)
+          : (<AppAuthStack />)}
       </GestureHandlerRootView>
     </NavigationContainer>
   );

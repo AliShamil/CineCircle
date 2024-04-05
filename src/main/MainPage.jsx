@@ -13,7 +13,7 @@ const MainPage = () => {
     };
     return (
         <StyledView className="flex-1 relative">
-            <StyledView className=" mt-10 mb-2 flex-row items-center justify-between w-screen px-[20px]">
+            <StyledView className=" mt-8 mb-2 flex-row items-center justify-between w-screen px-[20px]">
                 <StyledTouchableOpacity onPress={openDrawer} className="bg-[#1F1D36] ">
                     <HamburgerMenuIcon />
                 </StyledTouchableOpacity>
