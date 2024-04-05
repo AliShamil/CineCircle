@@ -59,82 +59,81 @@ const Review = () => {
     console.log(date)
     return (
         <ScrollView>
-            <StyledView className='mt-[30px] px-5 flex-row items-center'>
-                <StyledTouchableOpacity>
-                    <ArrowBackIcon width={20} height={20} />
-                </StyledTouchableOpacity>
-                <StyledText className='text-base ml-5 font-semibold text-white'>Write Your Review</StyledText>
+        <StyledView className='mt-[30px] px-5 flex-row items-center'>
+            <StyledTouchableOpacity>
+                <ArrowBackIcon width={20} height={20} />
+            </StyledTouchableOpacity>
+            <StyledText className='text-base ml-5 font-semibold text-white'>Write Your Review</StyledText>
+        </StyledView>
+        <StyledView className='px-5 mt-10 flex-row justify-between'>
+            <StyledView>
+                {loader ? <SkeletonPlaceholder  backgroundColor='#3D3B54'>
+                    <SkeletonPlaceholder.Item borderRadius={8} height={28} width={200} />
+                </SkeletonPlaceholder> :(<StyledText className='text-xl text-white font-semibold'>The Batman <StyledText className='text-[12px] font-normal'>2022</StyledText></StyledText>)}
+                
+                <StyledView className='mt-[18px]'>
+                    <StyledText className='text-white'>Specify the date you watched it</StyledText>
+                    <StyledView className='flex-row py-2 px-[15px] bg-[#3D3B54] rounded-xl justify-between mt-[6px]'>
+                        <CalendarIcon />
+                        <StyledText className='text-white mx-1 text-xs font-semibold'>{format(date, 'dd MMMM yyyy')}</StyledText>
+                        <StyledTouchableOpacity onPress={() => setShowCalendar(true)}>
+                            <StyledText className='text-[#E9A6A6] text-xs font-semibold'>Change</StyledText>
+                        </StyledTouchableOpacity>
+                    </StyledView>
+                </StyledView>
+                <StyledView className='mt-[18px]'>
+                    <StyledText className='mb-[6px] text-white'>Give Your Rating</StyledText>
+                    <StyledView className='flex-row justify-between'>
+                        <Stars
+                            half={true}
+                            default={0}
+                            update={(val) => { setStars(val) }}
+                            spacing={4}
+                            starSize={40}
+                            count={5}
+                            fullStar={<StarIcon width={20} height={20} />}
+                            emptyStar={<StarEmptyIcon width={20} height={20} />}
+                            halfStar={<StarHalfIcon width={20} height={20} />} />
+                        <StyledTouchableOpacity onPress={() => setLike(!isLiked)}>
+                            {isLiked ? <HeartIcon width={20} height={20} /> : <HeartEmptyIcon width={20} height={20} />}
+                        </StyledTouchableOpacity>
+                    </StyledView>
+                </StyledView>
             </StyledView>
             {loader ?
-                (<>
-                    <SkeletonPlaceholder borderRadius={4} backgroundColor='#3D3B54'>
-                        <SkeletonPlaceholder.Item paddingHorizontal={5} flexDirection="row" alignItems="center">
+                (<SkeletonPlaceholder backgroundColor='#3D3B54'>
+                    <SkeletonPlaceholder.Item width={120} height={190} borderRadius={8} />
+                </SkeletonPlaceholder>)
+                : (<FastImage className="w-[120px] rounded-lg shadow-black shadow-2xl h-[190px]"
+                    source={{
+                        uri: selectedImage,
+                        priority: FastImage.priority.normal,
+                    }}
 
-                        </SkeletonPlaceholder.Item>
-                    </SkeletonPlaceholder>
-                </>)
-                : (<><StyledView className='px-5 mt-10 flex-row justify-between'>
-                    <StyledView>
-                        <StyledText className='text-xl text-white font-semibold'>The Batman <StyledText className='text-[12px] font-normal'></StyledText></StyledText>
-                        <StyledView className='mt-[18px]'>
-                            <StyledText className='text-white'>Specify the date you watched it</StyledText>
-                            <StyledView className='flex-row py-2 px-[15px] bg-[#3D3B54] rounded-xl justify-between mt-[6px]'>
-                                <CalendarIcon />
-                                <StyledText className='text-white mx-1 text-xs font-semibold'>{format(date, 'dd MMMM yyyy')}</StyledText>
-                                <StyledTouchableOpacity onPress={() => setShowCalendar(true)}>
-                                    <StyledText className='text-[#E9A6A6] text-xs font-semibold'>Change</StyledText>
-                                </StyledTouchableOpacity>
-                            </StyledView>
-                        </StyledView>
-                        <StyledView className='mt-[18px]'>
-                            <StyledText className='mb-[6px] text-white'>Give Your Rating</StyledText>
-                            <StyledView className='flex-row justify-between'>
-                                <Stars
-                                    half={true}
-                                    default={0}
-                                    update={(val) => { setStars(val) }}
-                                    spacing={4}
-                                    starSize={40}
-                                    count={5}
-                                    fullStar={<StarIcon width={20} height={20} />}
-                                    emptyStar={<StarEmptyIcon width={20} height={20} />}
-                                    halfStar={<StarHalfIcon width={20} height={20} />} />
-                                <StyledTouchableOpacity onPress={() => setLike(!isLiked)}>
-                                    {isLiked ? <HeartIcon width={20} height={20} /> : <HeartEmptyIcon width={20} height={20} />}
-                                </StyledTouchableOpacity>
-                            </StyledView>
-                        </StyledView>
-                    </StyledView>
-                    <FastImage className="w-[120px] rounded-lg shadow-black shadow-2xl h-[190px]"
-                        source={{
+                    resizeMode={FastImage.resizeMode.cover}></FastImage>)}
 
-                            uri: selectedImage,
-                            priority: FastImage.priority.normal,
-                        }}
+        </StyledView>
+        <StyledView className='px-5 my-[18px]'>
+            <StyledView className=' h-[410px] rounded-[20px] bg-[#3D3B54]'>
+                <StyledTextInput className='px-[18px] py-[16px] text-white' placeholder="Write down your review..." multiline={true} placeholderTextColor={"#ACACB4"} />
+            </StyledView>
+        </StyledView>
+        <StyledTouchableOpacity onPress={openImagePicker} className='bg-[#E9A6A6] w-[104px] h-[36px] items-center justify-center rounded-[20px] self-end mr-5 mb-[18px]'>
+            <StyledText className='text-black font-semibold'>Publish</StyledText>
+        </StyledTouchableOpacity>
+        {showCalendar && (
+            <RNDateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={'date'}
+                is24Hour={true}
+                onChange={onChange}
+                maximumDate={new Date()}
+                minimumDate={new Date(1939, 8, 2)}
+            />
+        )}
 
-                        resizeMode={FastImage.resizeMode.cover}></FastImage>
-                </StyledView>
-                    <StyledView className='px-5 my-[18px]'>
-                        <StyledView className=' h-[410px] rounded-[20px] bg-[#3D3B54]'>
-                            <StyledTextInput className='px-[18px] py-[16px] text-white' placeholder="Write down your review..." multiline={true} placeholderTextColor={"#ACACB4"} />
-                        </StyledView>
-                    </StyledView>
-                    <StyledTouchableOpacity onPress={openImagePicker} className='bg-[#E9A6A6] w-[104px] h-[36px] items-center justify-center rounded-[20px] self-end mr-5 mb-[18px]'>
-                        <StyledText className='text-black font-semibold'>Publish</StyledText>
-                    </StyledTouchableOpacity></>)}
-            {showCalendar && (
-                <RNDateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode={'date'}
-                    is24Hour={true}
-                    onChange={onChange}
-                    maximumDate={new Date()}
-                    minimumDate={new Date(1939, 8, 2)}
-                />
-            )}
-
-        </ScrollView>
+    </ScrollView>
     )
 }
 

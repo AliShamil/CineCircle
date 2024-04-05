@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyledText, StyledTouchableOpacity, StyledView } from '../common/components/StyledComponents'
 import { SectionList } from 'react-native';
 import { format } from 'date-fns';
@@ -7,6 +7,7 @@ import Stars from 'react-native-stars';
 import HeartIcon from "../../assets/icons/gravity-ui--heart-fill.svg"
 import StarIcon from "../../assets/icons/star-icon.svg"
 import StarEmptyIcon from "../../assets/icons/star-empty.svg"
+import DiarySkeleton from './components/DiarySkeleton';
 const date = new Date();
 const DATA = [
     {
@@ -149,6 +150,13 @@ const DATA = [
 
 ];
 const Diary = () => {
+    const [loader, setLoader] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoader(false);
+        }, 3000);
+    })
     const ItemSeparatorComponent = () => {
         return (
             <StyledView className='h-[1px] mt-2 bg-[#29243B]' /> // Separator style
@@ -189,20 +197,23 @@ const Diary = () => {
     </StyledTouchableOpacity>
     );
     return (
-        <StyledView>
-            <SectionList
-                sections={DATA}
-                keyExtractor={(item, index) => item + index}
-                renderItem={renderItem}
-                renderSectionHeader={({ section: { title } }) => (
-                    <StyledText className='bg-[#29243B] text-white text-lg pl-5 py-2 rounded-3xl'>{title}</StyledText>
-                )}
-                stickySectionHeadersEnabled={true}
-                contentContainerStyle={{ gap: 5 }}
-                ItemSeparatorComponent={ItemSeparatorComponent}
+        <>
+        {loader ?
+            (<DiarySkeleton />) : (<StyledView>
+                <SectionList
+                    sections={DATA}
+                    keyExtractor={(item, index) => item + index}
+                    renderItem={renderItem}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <StyledText className='bg-[#29243B] text-white text-lg pl-5 py-2 rounded-3xl'>{title}</StyledText>
+                    )}
+                    stickySectionHeadersEnabled={true}
+                    contentContainerStyle={{ gap: 5 }}
+                    ItemSeparatorComponent={ItemSeparatorComponent}
 
-            />
-        </StyledView>
+                />
+            </StyledView>)}
+    </>
     )
 }
 

@@ -23,6 +23,8 @@ import SignUp from "../../auth/signUp/SignUp";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { useStore } from "zustand";
 import TestDragPage from "../../TestDragPage";
+import Review from "../../review/Review";
+import Movie from "../../movie/Movie";
 
 const BottomStack = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -108,7 +110,7 @@ function AppBottomStack() {
       />
       <BottomStack.Screen
         name="SearchPage"
-        component={TestDragPage}
+        component={Movie}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

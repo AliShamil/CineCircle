@@ -6,6 +6,7 @@ import Stars from 'react-native-stars';
 import HeartIcon from "../../assets/icons/gravity-ui--heart-fill.svg"
 import StarIcon from "../../assets/icons/star-icon.svg"
 import StarEmptyIcon from "../../assets/icons/star-empty.svg"
+import FilmsSkeleton from './components/FilmsSkeleton';
 
 const filmItems = [
     { poster: "https://i.pinimg.com/564x/0f/03/08/0f0308fa107964b8d0542ef8ffe4d119.jpg", starCount: 3.5, isLiked: false },
@@ -55,6 +56,7 @@ const Films = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(10); // Adjust this to control the number of items per page
+  const [loader, setLoader] = useState(true);
 
   const handleLoadMore = () => {
     const startIndex = currentPage * itemsPerPage;
@@ -68,7 +70,10 @@ const Films = () => {
   useEffect(() => {
     const initialData = filmItems.slice(0, itemsPerPage);
     setData(initialData);
+
+    setTimeout(() => setLoader(false), 3000)
   }, []);
+
 
   const renderItem = ({ item }) => (
     <StyledTouchableOpacity className='mx-[9px] mt-2'>
@@ -92,20 +97,23 @@ const Films = () => {
   );
 
   return (
-    <StyledView className='flex'>
-      <FlatList
-        data={data}
-        numColumns={4}
-        contentContainerStyle={{ paddingBottom: 5 }}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        onEndReached={handleLoadMore}
-        ListFooterComponent={() => {
-          // You can add a custom loading indicator here if needed
-          return null;
-        }}
-      />
-    </StyledView>
+    <>
+    {loader ? (<FilmsSkeleton />)
+      : (<StyledView className='flex'>
+        <FlatList
+          data={data}
+          numColumns={4}
+          contentContainerStyle={{ paddingBottom: 5 }}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReached={handleLoadMore}
+          ListFooterComponent={() => {
+            return null;
+          }}
+        />
+      </StyledView >)
+    }
+  </>
   );
 };
 
