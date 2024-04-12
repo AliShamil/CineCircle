@@ -5,6 +5,8 @@ import StarIcon from "../../../assets/icons/star-icon.svg"
 import StarEmptyIcon from "../../../assets/icons/star-empty.svg"
 import CommentIcon from "../../../assets/icons/comment-icon.svg"
 import Stars from 'react-native-stars';
+import useAuthTestStore from '../../common/hooks/useAuthTestStore';
+import { useStore } from 'zustand';
 const recentsReviewItems = [
     {
         movie: { title: "The Irishman", year: 2019, poster: "https://i.pinimg.com/564x/17/b7/76/17b776a9e2d980bfa56cd6117a538f9e.jpg" }, author: {
@@ -25,19 +27,20 @@ not sure i've ever mentioned this before but i have a very personal fear of not.
 ];
 
 const RecentReviewed = () => {
+    const { profile } = useStore(useAuthTestStore);
     const renderItem = ({ item }) => (
         <StyledView className="flex-row bg-[#29243B] rounded-2xl  justify-between">
-            <StyledImage className="w-[40px] h-[40px] rounded-full" source={{ uri: item.author.ppUrl }} />
+            <StyledImage className="w-[40px] h-[40px] rounded-full" source={{ uri: item?.ownerProfilePicture }} />
             <StyledView className="w-[60%] px-1">
                 <StyledView className="flex-row items-center mt-1">
-                    <StyledText className="text-sm text-white w-44" numberOfLines={1} >{item.movie.title}</StyledText>
-                    <StyledText className="text-[10px] text-[#797684] "> {item.movie.year}</StyledText>
+                    <StyledText className="text-sm text-white w-44" numberOfLines={1} >{item?.movieTitle}</StyledText>
+                    <StyledText className="text-[10px] text-[#797684] "> {item?.movieYear}</StyledText>
                 </StyledView>
                 <StyledView className="flex-row mt-1 items-center">
                     <StyledText className="text-[#94929D] text-xs">Review by</StyledText>
-                    <StyledTouchableOpacity>
-                        <StyledText className="text-[#E9A6A6] text-xs max-w-[60px]" numberOfLines={1}> {item.author.username}</StyledText>
-                    </StyledTouchableOpacity>
+                    <StyledView>
+                        <StyledText className="text-[#E9A6A6] text-xs max-w-[60px]" numberOfLines={1}> {item?.ownerUsername}</StyledText>
+                    </StyledView>
                     <StyledView className="flex-row ml-1">
                         <Stars
                             display={3.5}
@@ -48,20 +51,20 @@ const RecentReviewed = () => {
                             emptyStar={<StarEmptyIcon width={10} height={10}/>} />
                         {/* {renderStars(item.starCount)} */}
                     </StyledView>
-                    <StyledView className="flex-row items-center ml-1">
+                    {/* <StyledView className="flex-row items-center ml-1">
                         <CommentIcon />
-                        <StyledText className="text-[#94929D] ml-1 text-xs">{item.commentCount}</StyledText>
-                    </StyledView>
+                        <StyledText className="text-[#94929D] ml-1 text-xs">2</StyledText>
+                    </StyledView> */}
                 </StyledView>
                 <StyledText className="text-white text-xs mt-1" textBreakStrategy="balanced" numberOfLines={4}>
-                    {item.author.review}
+                {item?.review}
                 </StyledText>
                 <StyledTouchableOpacity className="my-1">
                     <StyledText className="text-[#9C4A8B] text-xs">Read more &gt;</StyledText>
                 </StyledTouchableOpacity>
             </StyledView>
 
-            <StyledImage style={{ resizeMode: "stretch" }} className="w-[90px] h-full rounded-2xl" source={{ uri: item.movie.poster }} />
+            <StyledImage style={{ resizeMode: "stretch" }} className="w-[90px] h-full rounded-2xl" source={{ uri: `https://image.tmdb.org/t/p/w500${item?.moviePoster}` }} />
 
 
         </StyledView>
@@ -76,7 +79,7 @@ const RecentReviewed = () => {
             </StyledView>
             <FlatList
                 contentContainerStyle={{ gap: 13, }}
-                data={recentsReviewItems}
+                data={profile?.recentlyReviewed}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
                 scrollEnabled={false}

@@ -11,15 +11,21 @@ import { storage } from "../../../storage";
 import axios from "axios";
 import { useStore } from "zustand";
 import { useAuthStore } from "../../common/hooks/useAuthStore";
+import useApiStore from "../../common/hooks/useApiStore";
+import useAuthTestStore from "../../common/hooks/useAuthTestStore";
 
 const Login = () => {
     GoogleSignin.configure({ idTokenAudience: 'cinecircle-6c35d', webClientId: '993553022973-q3a0c3pc699rkbp1og1spe2573gba5ar.apps.googleusercontent.com', });
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [test, setTest] = useState();
     const [errors, setErrors] = useState({})
     const [loader, setLoader] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const {setIsAuthorized} = useStore(useAuthStore)
+    const { setIsAuthorized } = useStore(useAuthStore)
+    const { setToken } = useStore(useAuthTestStore);
+
+    const { api } = useStore(useApiStore);
     const nav = useNavigation()
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -27,9 +33,29 @@ const Login = () => {
     const handleGoogleSignIn = async () => {
         try {
             const test = await GoogleSignin.hasPlayServices();
-            console.log(test)
             const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo)
+            const { user } = userInfo;
+            const request = { id: user.id, name: user.name, givenName: user.givenName,familyName:user.familyName,email:user.email,photo:user.photo}
+            setLoader(true)
+            await api.post("api/Auth/googleSignIn", request)
+                .then((res) => {
+                    let data = res.data;
+                    setLoader(false)
+                    // console.log( JSON.stringify(data))
+                    storage.set("token", data.accessToken);
+                    setToken((data.accessToken))
+                    setUsername("");
+                    setPassword("");
+                    setErrors({})
+                }).catch((error) => {
+                    let errors = {};
+                    errors.password = error.message
+                    setErrors(errors);
+                    setUsername("");
+                    setPassword("");
+                    return;
+
+                })
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.log('Google Sign-In cancelled');
@@ -52,56 +78,42 @@ const Login = () => {
     const handleSubmit = async () => {
         if (validateForm()) {
             console.log("Submitted", username, password);
-
-            try {
-                setLoader(true)
-                const response = await fetch('https://cinecircleapi.azurewebsites.net/api/Auth/login', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: username,
-                        password: password,
-                    }),
-                });
-                const json = await response.json();
-                if (!response.ok) {
-                    throw new Error(json)
-                }
-                if(response.ok){
+            setLoader(true)
+            const request = { email: username, password: password }
+            await api.post("api/Auth/login", request)
+                .then((res) => {
+                    let data = res.data;
                     setLoader(false)
-                    storage.set("user.token",JSON.stringify(json));
-                    setIsAuthorized(true);
+                    // console.log( JSON.stringify(data))
+                    storage.set("token", data.accessToken);
+                    setToken((data.accessToken))
                     setUsername("");
                     setPassword("");
                     setErrors({})
-                }
-            } catch (error) {
-                let errors = {};
-                errors.password = error.message
-                setErrors(errors);
-                setUsername("");
-                setPassword("");
-                return;
-            }
+                }).catch((error) => {
+                    let errors = {};
+                    errors.password = error.message
+                    setErrors(errors);
+                    setUsername("");
+                    setPassword("");
+                    return;
 
+                })
         }
     }
     return (
         <ScrollView style={{ backgroundColor: "#1F1D36" }}>
             {loader && (
                 <StyledView className="absolute z-50 h-screen w-screen justify-center items-center bg-black/30">
-                  <StyledView className="bg-[#29243B] shadow-2xl w-[150px] h-[150px] justify-center rounded-3xl">
-                    <ActivityIndicator  size="100px" />
-                  </StyledView>
+                    <StyledView className="bg-[#29243B] shadow-2xl w-[150px] h-[150px] justify-center rounded-3xl">
+                        <ActivityIndicator size="100px" />
+                    </StyledView>
                 </StyledView>
-              )}
+            )}
             <StyledView className=" flex-1 items-center" >
                 <StyledView className="items-center">
                     <StyledImage className="w-screen" source={require('../../../assets/images/login-banner.png')} />
-                    <StyledImage className="absolute top-[290]" source={require('../../../assets/images/logo.png')} />
+                    <StyledImage className="absolute w-[200px] h-[100px] top-[290]" source={require('../../../assets/images/logo.png')} />
                 </StyledView>
                 <StyledView className="items-center mt-5">
                     <StyledText className="text-3xl text-white font-bold">Login</StyledText>

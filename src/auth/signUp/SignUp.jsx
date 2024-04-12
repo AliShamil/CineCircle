@@ -21,7 +21,7 @@ const SignUp = () => {
             <StyledView className=" flex-1 items-center" >
                 <StyledView className="items-center">
                     <StyledImage className="w-screen" source={require('../../../assets/images/login-banner.png')} />
-                    <StyledImage className="absolute top-[290]" source={require('../../../assets/images/logo.png')} />
+                    <StyledImage className="absolute w-[200px] h-[100px] top-[290]" source={require('../../../assets/images/logo.png')} />
                 </StyledView>
                 <StyledView className="items-center mt-5">
                     <StyledText className="text-3xl text-white font-bold">Sign Up</StyledText>

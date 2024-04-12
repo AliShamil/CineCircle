@@ -22,7 +22,8 @@ import HeartActiveIcon from '../../../assets/icons/heart-active-icon.svg'
 import { storage } from '../../../storage';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { useStore } from 'zustand';
-
+import useAuthTestStore from '../hooks/useAuthTestStore';
+import FastImage from 'react-native-fast-image'
 
 const menuItems = [
     { icon: <HomeIcon />, iconActive: <HomeActiveIcon />, label: 'Home', screenName: 'MainPage' },
@@ -37,11 +38,14 @@ const menuItems = [
 
 const CustomDrawerContent = ({ navigation }) => {
     const [activeItem, setActiveItem] = useState('MainPage');
-    const {setIsAuthorized} = useStore(useAuthStore);
+    const { setIsAuthorized } = useStore(useAuthStore);
+    const { token, setToken, profile, setProfile } = useStore(useAuthTestStore);
     const handleLogOut = () => {
-        const hasUsername = storage.contains('user.token')
-        hasUsername ? storage.delete("user.token") : null;
-        setIsAuthorized(false);
+        if (token) {
+            storage.set('token', '');
+            setToken('');
+            setProfile({})
+        }
     }
 
 
@@ -68,19 +72,25 @@ const CustomDrawerContent = ({ navigation }) => {
                     <HamburgerMenuIcon />
                 </StyledTouchableOpacity>
 
-                <StyledView className='flex-row mt-[37px]'>
-                    <StyledImage className="rounded-full object-contain w-[44px] h-[44px] mr-[14px]" source={require("../../../assets/images/PP.jpg")} />
+                <StyledTouchableOpacity onPress={() => navigation.navigate("ProfilePage", { screen: "Profile" })} className='flex-row mt-[37px]'>
+                    <FastImage className="rounded-full object-contain w-[44px] h-[44px] mr-[14px]"
+                        source={{
+                            uri: profile.profilePicture,
+                            priority: FastImage.priority.normal,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover} />
+
                     <StyledView>
-                        <StyledText className='text-[#E9A6A6] font-semibold mb-[3px] text-base'>AliShamil</StyledText>
-                        <StyledText className='text-[#5E5C6F] font-[12px]'>@elisamilzade</StyledText>
+                        <StyledText className='text-[#E9A6A6] font-semibold mb-[3px] text-base'>{profile?.username}</StyledText>
+                        <StyledText className='text-[#5E5C6F] font-[12px]'>@{profile?.username}</StyledText>
                     </StyledView>
-                </StyledView>
+                </StyledTouchableOpacity>
                 <StyledView className='flex-row mt-[36px]'>
                     <StyledTouchableOpacity className='border mr-[12px] border-[#9C4A8B] px-3 py-1 rounded-[20px]'>
-                        <StyledText className='text-white text-xs'>500 Followers</StyledText>
+                        <StyledText className='text-white text-xs'>{profile?.followers?.length} Followers</StyledText>
                     </StyledTouchableOpacity>
                     <StyledTouchableOpacity className='border ml-[12px] border-[#9C4A8B] px-3 py-1 rounded-[20px]'>
-                        <StyledText className=' text-white text-xs'>500 Followings</StyledText>
+                        <StyledText className=' text-white text-xs'>{profile?.following?.length} Followings</StyledText>
                     </StyledTouchableOpacity>
                 </StyledView>
 

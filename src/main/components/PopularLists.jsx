@@ -2,6 +2,10 @@ import { StyledImage, StyledText, StyledTouchableOpacity, StyledView } from "../
 import LikeIcon from "../../../assets/icons/like-icon.svg"
 import CommentIcon from "../../../assets/icons/comment-icon.svg"
 import { FlatList } from "react-native";
+import useAuthTestStore from "../../common/hooks/useAuthTestStore";
+import { useStore } from "zustand";
+import useApiStore from "../../common/hooks/useApiStore";
+import { useEffect, useState } from "react";
 const listItems = [
     {
         poster: [
@@ -49,7 +53,24 @@ const listItems = [
         }
     },
 ];
+
 const PopularLists = () => {
+    const { token } = useStore(useAuthTestStore);
+const { api } = useStore(useApiStore);
+const [data, setData] = useState();
+const response = async () => {
+    await api.get('api/Li/getpopularLists', {
+        headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+        },
+    }).then(res => {
+        let data = res.data;
+        setData(data)
+    }).catch(err => {
+        console.log(err);
+    });
+}
+
     const renderItem = ({ item }) => (
         <StyledView className="w-[144px] ">
             <StyledView className="flex-row shadow-lg shadow-black">
@@ -83,6 +104,10 @@ const PopularLists = () => {
             </StyledTouchableOpacity>
         </StyledView>
     );
+    // useEffect(() => {
+    //     response()
+    // }, []);
+    console.log(data)
     return (
         <StyledView className="mt-6 mb-5 mr-5">
             <StyledText className="text-base mb-5 text-white font-semibold">Popular Lists This Month</StyledText>

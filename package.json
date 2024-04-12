@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@freakycoder/react-native-bounceable": "^1.0.3",
     "@react-native-community/datetimepicker": "^7.6.3",
     "@react-native-google-signin/google-signin": "^10.1.2",
     "@react-native-masked-view/masked-view": "^0.3.1",
@@ -20,10 +21,12 @@
     "@shopify/flash-list": "^1.6.4",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
+    "ioon-rn-dynamicinput": "^1.1.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-hook-form": "^7.51.2",
     "react-native": "0.73.5",
+    "react-native-animated-spinkit": "^1.5.2",
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.15.0",

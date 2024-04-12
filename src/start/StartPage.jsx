@@ -6,7 +6,7 @@ const StartPage = () => {
             <StyledView className="w-full h-[50%]  absolute top-0">
                 <StyledImage className="w-screen" source={require("../../assets/images/start-header.png")} />
             </StyledView>
-            <StyledImage className="absolute top-1/2" source={require("../../assets/images/logo.png")} />
+            <StyledImage className="absolute w-[240px] h-[120px] top-1/2" source={require("../../assets/images/logo.png")} />
             <StyledView className="w-[80%] absolute bottom-[20%] items-center">
                 <StyledText className="text-white text-center text-xl font-bold">
                     “Track films you’ve watched. Save those you want to see.
