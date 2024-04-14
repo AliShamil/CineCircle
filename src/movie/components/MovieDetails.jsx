@@ -3,14 +3,13 @@ import { StyledText, StyledTouchableOpacity, StyledView } from '../../common/com
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
 
-const MovieDetails = () => {
+const MovieDetails = ({ credits }) => {
     const [activeItem, setActiveItem] = useState('Cast');
-
     const chooseOption = (option) => {
         setActiveItem(option);
     };
 
-    const data = [
+    const listData = [
         { title: 'Cast' },
         { title: 'Crew' },
         { title: 'Details' }
@@ -27,64 +26,22 @@ const MovieDetails = () => {
         </StyledTouchableOpacity>
     );
 
-    const castData = [
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-        { ppUri: 'https://i.pinimg.com/564x/e5/58/3e/e5583e507f6cbf49000218116dd9757c.jpg', name: 'Ryan Gosling', role: 'Driver' },
-    ];
-
     const castRenderItem = ({ item }) => (
-        <StyledTouchableOpacity className='w-[70px] items-center mr-3'>
+        <StyledTouchableOpacity className='w-[70px] h-[90px] items-center mr-3'>
             <FastImage className="w-[50px] h-[50px]  rounded-full shadow-black shadow-2xl "
                 source={{
-                    uri: item.ppUri,
+                    uri: `https://image.tmdb.org/t/p/w500${item?.profilePath}`,
                     priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.cover} />
-            <StyledText className='text-[11px] text-center text-white font-semibold'>{item.name}</StyledText>
-            <StyledText className='text-[9px] text-center text-[#8F8E9B] font-semibold' >{item.role}</StyledText>
+            <StyledText className='text-[11px] text-center text-white font-semibold'>{item?.name}</StyledText>
+            <StyledText className='text-[9px] text-center text-[#8F8E9B] font-semibold' >{activeItem === "Cast" ? item?.character : item?.job}</StyledText>
         </StyledTouchableOpacity>
     );
-
-    let renderedContent;
-    switch (activeItem) {
-        case 'Cast':
-            renderedContent = (
-                <FlatList
-                    data={castData}
-                    horizontal={true}
-                    renderItem={castRenderItem}
-                    contentContainerStyle={{ paddingVertical: 2 }}
-                    estimatedItemSize={10}
-                    showsHorizontalScrollIndicator={false}
-                />
-            );
-            break;
-        case 'Crew':
-            renderedContent = (
-                <FlatList
-                    data={castData}
-                    horizontal={true}
-                    renderItem={castRenderItem}
-                    contentContainerStyle={{ paddingVertical: 2 }}
-                    estimatedItemSize={10}
-                    showsHorizontalScrollIndicator={false}
-                />
-            );
-            break;
-        default:
-            renderedContent = null;
-            break;
-    }
-
     return (
         <StyledView className='px-5'>
             <FlatList
-                data={data}
+                data={listData}
                 horizontal={true}
                 renderItem={renderItem}
                 contentContainerStyle={{ paddingVertical: 2 }}
@@ -92,7 +49,26 @@ const MovieDetails = () => {
                 scrollEnabled={false}
             />
             <StyledView className='my-1' />
-            {renderedContent}
+            {activeItem === "Cast" && (<FlatList
+                data={credits?.cast}
+                keyExtractor={(item) => item.id}
+                horizontal={true}
+                renderItem={castRenderItem}
+                contentContainerStyle={{ paddingVertical: 2 }}
+                estimatedItemSize={10}
+                showsHorizontalScrollIndicator={false}
+            />)
+            }
+            {activeItem === "Crew" && (<FlatList
+                data={credits?.crew}
+                horizontal={true}
+                keyExtractor={(item) => item.creditId}
+                renderItem={castRenderItem}
+                contentContainerStyle={{ paddingVertical: 2 }}
+                estimatedItemSize={10}
+                showsHorizontalScrollIndicator={false}
+            />)
+            }
         </StyledView>
     );
 }

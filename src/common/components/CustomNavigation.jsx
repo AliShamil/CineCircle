@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -153,7 +153,7 @@ const CustomNavigation = () => {
   const { isAuthorized, setIsAuthorized } = useStore(useAuthStore)
   const { token, setToken, setProfile } = useStore(useAuthTestStore);
   const { api } = useStore(useApiStore);
-
+  const [loader, setLoader] = useState(false);
   useEffect(() => {
 console.log(storage.getString("token"))
     if (token) {

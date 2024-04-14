@@ -3,7 +3,7 @@ import { StyledImage, StyledText, StyledTouchableOpacity, StyledView } from '../
 import { FlatList } from 'react-native';
 import StarIcon from "../../../assets/icons/star-icon.svg"
 import StarEmptyIcon from "../../../assets/icons/star-empty.svg"
-import CommentIcon from "../../../assets/icons/comment-icon.svg"
+import HeartIcon from "../../../assets/icons/gravity-ui--heart-fill.svg"
 import Stars from 'react-native-stars';
 const reviewItems = [
     {
@@ -23,19 +23,19 @@ not sure i've ever mentioned this before but i have a very personal fear of not.
         }, starCount: 3, commentCount: 20
     },
 ];
-const AllReviews = () => {
+const AllReviews = ({reviews}) => {
     const renderItem = ({ item }) => (
         <StyledView className="flex-row bg-[#29243B] rounded-2xl ">
-            <StyledImage className="w-[40px] h-[40px] rounded-full mr-[10px]" source={{ uri: item.author.ppUrl }} />
+            <StyledImage className="w-[40px] h-[40px] rounded-full mr-[10px]" source={{ uri: item?.ownerProfilePicture }} />
             <StyledView className="w-[80%] px-1">
                 <StyledView className="flex-row mt-1 items-center">
                     <StyledText className="text-[#94929D] text-xs">Review by</StyledText>
                     <StyledTouchableOpacity>
-                        <StyledText className="text-[#E9A6A6] text-xs max-w-[60px]" numberOfLines={1}> {item.author.username}</StyledText>
+                        <StyledText className="text-[#E9A6A6] text-xs max-w-[60px]" numberOfLines={1}> {item?.ownerUsername}</StyledText>
                     </StyledTouchableOpacity>
                     <StyledView className="flex-row ml-1">
                         <Stars
-                            display={3.5}
+                            display={item?.rating}
                             spacing={1}
                             count={5}
                             starSize={5}
@@ -43,12 +43,11 @@ const AllReviews = () => {
                             emptyStar={<StarEmptyIcon width={10} height={10}/>} />
                     </StyledView>
                     <StyledView className="flex-row items-center ml-1">
-                        <CommentIcon />
-                        <StyledText className="text-[#94929D] ml-1 text-xs">{item.commentCount}</StyledText>
+                        <HeartIcon  width={11} height={11}/>
                     </StyledView>
                 </StyledView>
-                <StyledText className="text-white text-xs mt-1" textBreakStrategy="balanced" numberOfLines={4}>
-                    {item.author.review}
+                <StyledText className="text-white text-xs mt-1 h-16" textBreakStrategy="balanced" numberOfLines={4}>
+                    {item?.review}
                 </StyledText>
                 <StyledTouchableOpacity className="my-1">
                     <StyledText className="text-[#9C4A8B] text-xs">Read more &gt;</StyledText>
@@ -73,7 +72,7 @@ const AllReviews = () => {
             <StyledView className='px-5'>
             <FlatList
                 contentContainerStyle={{ gap: 13, }}
-                data={reviewItems}
+                data={reviews}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
                 scrollEnabled={false}

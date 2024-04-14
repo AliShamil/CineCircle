@@ -88,7 +88,7 @@ const Search = () => {
     // Render your movie item here
     return (
       // Your movie item component
-      <StyledTouchableOpacity  className='w-[30%] h-[200px] mx-[7px] mt-1'>
+      <StyledTouchableOpacity onPress={()=>nav.navigate("MovieDetails",{screen:"Movie" ,item:item?.id,merge: true})}   className='w-[30%] h-[200px] mx-[7px] mt-1'>
         {item.posterPath ?
           <FastImage className="rounded object-contain w-full h-full mt-1"
             source={{
@@ -108,7 +108,7 @@ const Search = () => {
   return (
     <StyledView>
       <StyledView className="flex-row mb-3 justify-between px-3 mt-2">
-        <StyledTouchableOpacity className="">
+        <StyledTouchableOpacity onPress={()=>{nav.navigate("MainPage")}} className="">
           <Logo width={40} height={40} />
         </StyledTouchableOpacity>
 

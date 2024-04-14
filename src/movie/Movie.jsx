@@ -19,44 +19,41 @@ import useApiStore from '../common/hooks/useApiStore'
 import { useStore } from 'zustand'
 import useAuthTestStore from '../common/hooks/useAuthTestStore'
 
-const text = `UNMASK THE TRUTH.
-
-In his second year of fighting crime, Batman uncovers corruption in Gotham City that connects to his own family while facing a serial killer known as the Riddler.`
 const Movie = ({ route }) => {
     const [loader, setLoader] = useState(true);
     const [data, setData] = useState();
     const { item } = route.params;
     const nav = useNavigation();
     const { api } = useStore(useApiStore);
-  const { token } = useStore(useAuthTestStore);
+    const { token } = useStore(useAuthTestStore);
 
-  const fetchMovieData = async () => {
-    try {
-      const response = await api.get(
-        `https://cinecircleapi.azurewebsites.net/api/Movie/getMovie?id=${item}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setData(response.data);
-      setLoader(false);
-    } catch (error) {
-      console.log('Error fetching movie:', error);
-      setLoader(false);
-    }
-  };
+    const fetchMovieData = async () => {
+        setLoader(true)
+        await api.get(
+            `https://cinecircleapi.azurewebsites.net/api/Movie/getMovie?id=${item}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        ).then((response) => {
+            setData(response.data);
+            setLoader(false);
+        }).catch(function (error) {
+            console.log('Error fetching movie:', error);
+            setLoader(false);
+        })
+    };
 
     useEffect(() => {
         fetchMovieData();
-    },[api, item, token])
+    }, [api, item, token])
     return (
         <>
             {loader ? (<MovieSkeleton />)
                 : (<ScrollView>
                     <StyledView className="relative w-full h-[225px] overflow-hidden bg-transparent">
-                        <FastImage className="absolute bottom-0 -right-5 w-[900px] h-[600px]  rounded-full rounded-bl-none bg-red-500 transform translate-x-1/2 translate-y-1/2"
+                        <FastImage className="absolute bottom-0 -right-5 w-[900px] h-[600px]  rounded-full rounded-bl-none  transform translate-x-1/2 translate-y-1/2"
                             source={{
                                 uri: "https://i.pinimg.com/originals/2d/44/e9/2d44e965dff94b7aa7a51fb42f25faf8.gif",
                                 priority: FastImage.priority.normal,
@@ -79,15 +76,15 @@ const Movie = ({ route }) => {
                             <StyledView className='flex-row items-center mt-2 justify-center'>
                                 <StyledView className='items-center '>
                                     <EyeIcon width={20} height={20} />
-                                    <StyledText className='text-xs text-[#8F8E9B]'>30k</StyledText>
+                                    <StyledText className='text-xs text-[#8F8E9B]'>{data?.memberCount}</StyledText>
                                 </StyledView>
                                 <StyledView className='items-center mx-4'>
                                     <HeartIcon width={20} height={20} />
-                                    <StyledText className='text-xs text-[#8F8E9B]'>10k</StyledText>
+                                    <StyledText className='text-xs text-[#8F8E9B]'>{data?.likeCount}</StyledText>
                                 </StyledView>
                                 <StyledView className='items-center'>
                                     <ListIcon width={20} height={20} />
-                                    <StyledText className='text-xs text-[#8F8E9B]'>25k</StyledText>
+                                    <StyledText className='text-xs text-[#8F8E9B]'>{data?.listCount}</StyledText>
                                 </StyledView>
                             </StyledView>
 
@@ -108,12 +105,12 @@ const Movie = ({ route }) => {
                         </StyledView>
                         <StyledView className='w-[220px] '>
                             <StyledView className='flex-row items-center   justify-between'>
-                                <StyledText className='text-xl text-white font-semibold'>{data?.originalTitle}  <StyledText className='text-[12px] font-normal'>2022</StyledText></StyledText>
+                                <StyledText className='text-xl text-white font-semibold'>{data?.originalTitle}  <StyledText className='text-[12px] font-normal'>{new Date(data?.releaseDate).getFullYear()}</StyledText></StyledText>
                                 <StyledText className='text-[10px] self-end mb-1 text-white'>{data?.runtime} min</StyledText>
                             </StyledView>
-                            <StyledText className='text-[12px] text-white'>Directed by <StyledText className='font-semibold'>Matt Reeves</StyledText></StyledText>
+                            <StyledText className='text-[12px] text-white'>Directed by <StyledText className='font-semibold'>{data?.credits?.crew.find((person) => person.job === "Director")?.name}</StyledText></StyledText>
                             <StyledText className="text-white text-[10px] mt-3" textBreakStrategy="balanced" numberOfLines={5}>
-                                {text}
+                                {data?.overview}
                             </StyledText>
                             <StyledView className='mt-10'>
                                 <StyledText className='text-base mb-1 text-[#8F8E9B]'>Ratings</StyledText>
@@ -122,19 +119,19 @@ const Movie = ({ route }) => {
                                         <StarIcon width={10} height={10} />
                                     </StyledView>
                                     <StyledView className='gap-x-[2px] w-[120px] h-[60px] border-b border-b-[#8F8E9B] flex-row-reverse'>
-                                        <StyledTouchableOpacity className='w-[10px] h-full  bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[80%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[60%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[40%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[20%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[80%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[60%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-full  bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[20%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
-                                        <StyledTouchableOpacity className='w-[10px] h-[40%] self-end bg-[#8F8E9B]'></StyledTouchableOpacity>
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["5"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["4.5"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["4"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["3.5"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["3"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["2.5"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["2"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["1.5"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["1"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
+                                        {data?.ratings&&<StyledTouchableOpacity style={{height:`${data?.ratings["0.5"]}%`}} className={`w-[10px] self-end bg-[#8F8E9B]`}></StyledTouchableOpacity>}
                                     </StyledView>
                                     <StyledView className='items-center'>
-                                        <StyledText className='text-3xl text-[#E9A6A6]'>4.4</StyledText>
+                                        <StyledText className='text-3xl text-[#E9A6A6]'>{data?.rating}</StyledText>
                                         <StyledView className='flex-row'>
                                             <StarIcon width={10} height={10} />
                                             <StarIcon width={10} height={10} />
@@ -148,8 +145,8 @@ const Movie = ({ route }) => {
                         </StyledView>
 
                     </StyledView>
-                    <MovieDetails />
-                    <AllReviews />
+                    <MovieDetails credits={data?.credits}/>
+                    <AllReviews reviews={data?.reviews} />
 
                 </ScrollView>)}
         </>

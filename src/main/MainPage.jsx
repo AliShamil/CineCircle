@@ -18,7 +18,6 @@ const MainPage = () => {
     const nav = useNavigation();
     const [loader, setLoader] = useState(false);
     const { profile } = useStore(useAuthTestStore);
-console.log(profile.profilePicture)
     const openDrawer = () => {
         nav.openDrawer();
     };
@@ -30,7 +29,7 @@ console.log(profile.profilePicture)
                         <StyledTouchableOpacity onPress={openDrawer} className="bg-[#1F1D36] ">
                             <HamburgerMenuIcon />
                         </StyledTouchableOpacity>
-                        <StyledTouchableOpacity onPress={()=>nav.navigate("ProfilePage",{screen:"Profile"})}>
+                        <StyledTouchableOpacity onPress={() => nav.navigate("ProfilePage", { screen: "Profile" })}>
                             <FastImage className="rounded-full object-contain w-10 h-10 mt-1"
                                 source={{
                                     uri: profile.profilePicture,
